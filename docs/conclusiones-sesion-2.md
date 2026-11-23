@@ -412,3 +412,42 @@ En materia de seguridad, el contraste entre `km infra smells` y Gitleaks tambié
 ### 3. Si hubiera una hora más, ¿qué agregaría al pipeline y por qué?
 
 Agregaría primero una verificación automática y acotada de casos límite del dominio (inicio y fin inclusivos de los turnos, días inmediatamente anteriores y posteriores y turnos superpuestos) junto con una medición de mutación más completa que pruebe por separado cada aparición del operador. Esto ataca directamente la brecha observada: con 100 % de ramas cubiertas, el bug existía y varios mutantes sobrevivían. Como siguiente prioridad, dejaría planificada la actualización de Go y la eliminación controlada de la excepción de `govulncheck`, verificando luego la seguridad de las imágenes reconstruidas.
+
+
+## Registro de uso de IA
+
+Durante el desarrollo de la tarea utilicé ChatGPT como asistente de apoyo técnico y aprendizaje, principalmente para comprender los procedimientos, ejecutar las actividades en el orden solicitado e interpretar los resultados obtenidos.
+
+El trabajo se realizó de manera interactiva: ejecuté personalmente los comandos en Ubuntu/WSL y Docker Desktop, compartí las salidas de terminal y los resultados de GitHub Actions, y utilicé el asistente para resolver dudas, validar lo observado y comprender las implicancias técnicas de cada actividad.
+
+### Propuestas aceptadas
+
+- **Orientación paso a paso:** utilicé el asistente para organizar la ejecución de la tarea según el enunciado, diferenciando los comandos que debían ejecutarse en WSL de aquellos correspondientes al contenedor de herramientas.
+- **Resolución de problemas del entorno:** recibí orientación para identificar que inicialmente estaba utilizando la distribución interna `docker-desktop` en lugar de Ubuntu/WSL y configurar correctamente el entorno de trabajo.
+- **Interpretación de resultados:** compartí las salidas de pruebas unitarias, cobertura, mutaciones, análisis estático y auditorías de seguridad. El asistente explicó los resultados y su relación con los objetivos del ejercicio.
+- **Diagnóstico del CI:** revisamos conjuntamente los resultados de GitHub Actions para comprender por qué fallaban determinados controles y cómo interpretar los estados rojo y verde.
+- **Apoyo en la documentación:** utilicé el asistente para organizar las mediciones y redactar las conclusiones, contrastándolas con la evidencia obtenida durante las ejecuciones.
+
+### Propuestas corregidas o ajustadas
+
+- Se ajustaron las instrucciones iniciales para trabajar correctamente en Ubuntu/WSL, después de identificar las diferencias entre este entorno y la distribución interna de Docker Desktop.
+- Se precisó la interpretación de las pruebas de mutación: el puntaje aumentó de 20 % a 25 %, pero la cantidad absoluta de mutantes detectados permaneció en uno. Por lo tanto, no correspondía afirmar que las pruebas detectaban más mutantes únicamente por el aumento porcentual.
+- Se revisó la interpretación del gate de seguridad. El análisis de infraestructura detectó seis secretos en un archivo modificado, aunque el parche agregaba solo uno. También se comprobó que revertir un secreto no necesariamente elimina su detección en el historial de Git.
+- Se ajustaron los pasos de GitHub considerando el estado real de los Pull Requests y sus ejecuciones.
+
+### Propuestas rechazadas o no adoptadas
+
+- No se utilizaron resultados inventados o estimaciones para completar las métricas. Los valores documentados corresponden a las ejecuciones realizadas.
+- No se desactivaron controles de seguridad ni se modificó el workflow para forzar resultados exitosos.
+- No se aplicaron actualizaciones indiscriminadas como `npm audit fix --force`, priorizando las correcciones específicas solicitadas por el enunciado.
+- No se asumió que todas las alertas de seguridad eran vulnerabilidades explotables; se realizó un triaje considerando severidad, contexto y alcance.
+
+### Reflexión sobre el uso de IA
+
+El principal aporte de la IA fue facilitar la comprensión técnica durante la ejecución práctica, más que automatizar la resolución de la tarea.
+
+El proceso consistió en ejecutar comandos, revisar las salidas, formular preguntas, contrastar interpretaciones y tomar decisiones basadas en evidencia.
+
+Esto permitió comprender mejor conceptos como cobertura de pruebas, análisis de mutaciones, vulnerabilidades de dependencias, secretos en el historial de Git, controles bloqueantes de CI y reproducibilidad de contenedores.
+
+La ejecución de las pruebas, las modificaciones del repositorio y la verificación de los resultados se realizaron directamente en el entorno de trabajo. La IA se utilizó como herramienta de consulta, explicación, revisión y apoyo en la documentación, manteniendo una evaluación crítica de sus recomendaciones.
